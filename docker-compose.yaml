@@ -1,0 +1,26 @@
+﻿services:
+  server:
+    build:
+      context: Hoerbiger.Server/.
+      target: final
+    ports:
+      - 8080:8080
+    environment:
+      MqttClient__certFilePath: /run/secrets/mqtt-cert-file
+      MqttClient__keyFilePath: /run/secrets/mqtt-key-file
+    secrets:
+      - mqtt-cert-file
+      - mqtt-key-file
+  client:
+    build:
+      context: hoerbiger.client/.
+    environment:
+      NODE_ENV: production
+      ASPNETCORE_URLS: http://server:8080
+    ports:
+      - 53126:53126
+secrets:
+  mqtt-cert-file:
+    file: C:\Users\Admin\Source\Repos\hoerbiger-app\Hoerbiger.Server\certificate\backend-authn-ID.pem
+  mqtt-key-file:
+    file: C:\Users\Admin\Source\Repos\hoerbiger-app\Hoerbiger.Server\certificate\backend-authn-ID.key
